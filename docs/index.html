@@ -90,28 +90,36 @@
     const aucSlider = document.getElementById('aucSlider');
     const aucValue = document.getElementById('aucValue');
     const aucImg = document.getElementById('aucImg');
-
+  
     aucSlider.addEventListener('input', function() {
       const val = parseFloat(this.value).toFixed(3);
       aucValue.textContent = val;
       aucImg.src = `www/auc_${val}.png`;
     });
-
+  
     // 2. Calibration Update Logic
     const slopeSlider = document.getElementById('slopeSlider');
     const interSlider = document.getElementById('interSlider');
     const slopeValue = document.getElementById('slopeValue');
     const interValue = document.getElementById('interValue');
     const calImg = document.getElementById('calImg');
-
+  
     function updateCalibration() {
-      const slope = parseFloat(slopeSlider.value).toFixed(1);
-      const inter = parseFloat(interSlider.value).toFixed(1);
-      slopeValue.textContent = slope;
-      interValue.textContent = inter;
-      calImg.src = `www/cal_s${slope}_i${inter}.png`;
+      let slope = parseFloat(slopeSlider.value);
+      let inter = parseFloat(interSlider.value);
+  
+      // Prevent -0.0 string formatting bugs
+      if (Math.abs(slope) === 0) slope = 0;
+      if (Math.abs(inter) === 0) inter = 0;
+  
+      const slopeStr = slope.toFixed(1);
+      const interStr = inter.toFixed(1);
+  
+      slopeValue.textContent = slopeStr;
+      interValue.textContent = interStr;
+      calImg.src = `www/cal_s${slopeStr}_i${interStr}.png`;
     }
-
+  
     slopeSlider.addEventListener('input', updateCalibration);
     interSlider.addEventListener('input', updateCalibration);
   </script>
