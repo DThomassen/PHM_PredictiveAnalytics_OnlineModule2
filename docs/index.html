@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2299.77">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Model Performance Visualization&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body { background-color: #f8f9fa; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.navbar { border-bottom: 1px solid #e3e6f0; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.sidebar { background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e3e6f0; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.plot-container img { width: 100%; max-width: 800px; height: auto; display: block; margin: auto; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card { margin-top: 15px; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Top Navigation Bar --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;nav class="navbar navbar-expand-lg navbar-light bg-light px-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="nav nav-tabs" id="nav-tab" role="tablist"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="nav-link active" id="nav-disc-tab" data-bs-toggle="tab" data-bs-target="#nav-disc" type="button"&gt;Discrimination&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button class="nav-link" id="nav-cal-tab" data-bs-toggle="tab" data-bs-target="#nav-cal" type="button"&gt;Calibration&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/nav&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="container-fluid p-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="tab-content" id="nav-tabContent"&gt;</p>
+<p class="p2"><span class="Apple-converted-space">      </span></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;!-- TAB 1: Discrimination --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="tab-pane fade show active" id="nav-disc" role="tabpanel"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="col-md-4 sidebar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h5&gt;Area Under the ROC Curve (AUC)&lt;/h5&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mb-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label for="aucSlider" class="form-label"&gt;AUC: &lt;strong id="aucValue"&gt;0.750&lt;/strong&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;input type="range" class="form-range" id="aucSlider" min="0.5" max="0.99" step="0.005" value="0.75"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="card-header font-weight-bold"&gt;Description&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="card-body"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;Discrimination refers to a model's ability to separate people who experience the outcome (cases) from people who do not experience the outcome of interest (non-cases). Greater separation implies better discrimination.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;The AUC is one measure of discrimination. It asks the following question: suppose we randomly pick one individual who experienced the outcome from the data and one individual who did not. What is the probability that our model correctly identifies the "case", i.e. the person with a higher risk of the outcome? Hence, an AUC of 1 means that the model can always correctly identify the "case". However, obtaining an AUC of 1 is unfeasible in practice. If the model cannot distinguish between the groups (i.e. is not better than guessing randomly) the AUC is 0.5.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;The figure shows how the predicted risks are distributed among cases and non-cases. Change the value of the AUC to see what this means for the separation of the groups in the figure.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="col-md-8 plot-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;img id="aucImg" src="www/auc_0.750.png" alt="AUC Plot"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;!-- TAB 2: Calibration --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="tab-pane fade" id="nav-cal" role="tabpanel"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="row"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="col-md-4 sidebar"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mb-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label for="slopeSlider" class="form-label"&gt;Calibration slope: &lt;strong id="slopeValue"&gt;1.0&lt;/strong&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;input type="range" class="form-range" id="slopeSlider" min="0" max="4" step="0.2" value="1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="mb-3"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;label for="interSlider" class="form-label"&gt;Calibration intercept: &lt;strong id="interValue"&gt;0.0&lt;/strong&gt;&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;input type="range" class="form-range" id="interSlider" min="-1" max="1" step="0.1" value="0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="card-header font-weight-bold"&gt;Description&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;div class="card-body"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;Calibration refers to how well the predicted risks are aligned with the observed risks on average. For example, we would like that the observed risk is on average 0.5 among individuals with predicted risk 0.5. If this is (approximately) the case, we say that the model is well calibrated. When this is not the case, the model is said to be miscalibrated.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;A calibration plot is one tool to assess calibration. In a calibration plot, predicted risks are compared to the observed percentage of people who experience the outcome (observed risk). The calibration curve can be described with an intercept and a slope. The intercept will be close to 0 and the slope will be close to 1 for a well calibrated model. The calibration curve is then a diagonal line. In presence of miscalibration, the risks are under- and/or overestimated. The curve will deviate from the diagonal line.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;In the figure, change the calibration slope and intercept to see what this means for the calibration of the model. The calibration intercept and slope can be difficult to interpret simultaneously, so it is preferred to study them separately, keeping the intercept at 1 when varying the slope and keeping the slope at 0 when varying the intercept.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;The calibration intercept can be seen as a measure of overall prediction bias. Keeping the slope equal to one, but changing the intercept, you will see that the risks are either under- or overestimated&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;The calibration slope can be thought of as a measure of how well the model captures the variability of the individual risks. Keeping the intercept at zero, but setting the slope to be larger than one you will see that the predictions are not "extreme" enough. The model tends to overestimate the risk for individuals with low risk, but underestimate the risk for individuals with high risk. If the slope is smaller than one, the predictions are too extreme. Low risks are underestimated while high risks are overestimated.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;Note: the reason that the calibration curve is not necessarily a straight line is because it is computed on the log-odds (logit) scale: logit(Observed risk) ≈ Intercept + slope*logit(Predicted risk), where logit(p)=ln(p/1-p).&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">              </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="col-md-8 plot-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;img id="calImg" src="www/cal_s1.0_i0.0.png" alt="Calibration Plot"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/bootstrap.bundle.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 1. AUC Update Logic</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const aucSlider = document.getElementById('aucSlider');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const aucValue = document.getElementById('aucValue');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const aucImg = document.getElementById('aucImg');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>aucSlider.addEventListener('input', function() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const val = parseFloat(this.value).toFixed(3);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>aucValue.textContent = val;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>aucImg.src = `www/auc_${val}.png`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 2. Calibration Update Logic</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const slopeSlider = document.getElementById('slopeSlider');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const interSlider = document.getElementById('interSlider');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const slopeValue = document.getElementById('slopeValue');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const interValue = document.getElementById('interValue');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const calImg = document.getElementById('calImg');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function updateCalibration() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const slope = parseFloat(slopeSlider.value).toFixed(1);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const inter = parseFloat(interSlider.value).toFixed(1);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>slopeValue.textContent = slope;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>interValue.textContent = inter;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>calImg.src = `www/cal_s${slope}_i${inter}.png`;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>slopeSlider.addEventListener('input', updateCalibration);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>interSlider.addEventListener('input', updateCalibration);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
