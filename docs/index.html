@@ -17,8 +17,8 @@
   <!-- Top Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-      <button class="nav-link active" id="nav-disc-tab" data-bs-toggle="tab" data-bs-target="#nav-disc" type="button">Discrimination</button>
-      <button class="nav-link" id="nav-cal-tab" data-bs-toggle="tab" data-bs-target="#nav-cal" type="button">Calibration</button>
+      <button class="nav-link active" id="nav-disc-tab" data-bs-toggle="tab" data-bs-target="#nav-disc" type="button" role="tab" aria-controls="nav-disc" aria-selected="true">Discrimination</button>
+      <button class="nav-link" id="nav-cal-tab" data-bs-toggle="tab" data-bs-target="#nav-cal" type="button" role="tab" aria-controls="nav-cal" aria-selected="false">Calibration</button>
     </div>
   </nav>
 
@@ -26,7 +26,7 @@
     <div class="tab-content" id="nav-tabContent">
       
       <!-- TAB 1: Discrimination -->
-      <div class="tab-pane fade show active" id="nav-disc" role="tabpanel">
+      <div class="tab-pane fade show active" id="nav-disc" role="tabpanel" aria-labelledby="nav-disc-tab">
         <div class="row">
           <div class="col-md-4 sidebar">
             <h5>Area Under the ROC Curve (AUC)</h5>
@@ -51,7 +51,7 @@
       </div>
 
       <!-- TAB 2: Calibration -->
-      <div class="tab-pane fade" id="nav-cal" role="tabpanel">
+      <div class="tab-pane fade" id="nav-cal" role="tabpanel" aria-labelledby="nav-cal-tab">
         <div class="row">
           <div class="col-md-4 sidebar">
             <div class="mb-3">
@@ -90,36 +90,36 @@
     const aucSlider = document.getElementById('aucSlider');
     const aucValue = document.getElementById('aucValue');
     const aucImg = document.getElementById('aucImg');
-  
+
     aucSlider.addEventListener('input', function() {
       const val = parseFloat(this.value).toFixed(3);
       aucValue.textContent = val;
       aucImg.src = `www/auc_${val}.png`;
     });
-  
+
     // 2. Calibration Update Logic
     const slopeSlider = document.getElementById('slopeSlider');
     const interSlider = document.getElementById('interSlider');
     const slopeValue = document.getElementById('slopeValue');
     const interValue = document.getElementById('interValue');
     const calImg = document.getElementById('calImg');
-  
+
     function updateCalibration() {
       let slope = parseFloat(slopeSlider.value);
       let inter = parseFloat(interSlider.value);
-  
+
       // Prevent -0.0 string formatting bugs
       if (Math.abs(slope) === 0) slope = 0;
       if (Math.abs(inter) === 0) inter = 0;
-  
+
       const slopeStr = slope.toFixed(1);
       const interStr = inter.toFixed(1);
-  
+
       slopeValue.textContent = slopeStr;
       interValue.textContent = interStr;
       calImg.src = `www/cal_s${slopeStr}_i${interStr}.png`;
     }
-  
+
     slopeSlider.addEventListener('input', updateCalibration);
     interSlider.addEventListener('input', updateCalibration);
   </script>
