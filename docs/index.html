@@ -17,8 +17,8 @@
   <!-- Top Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-      <button class="nav-link active" id="nav-disc-tab" data-bs-toggle="tab" data-bs-target="#nav-disc" type="button" role="tab" aria-controls="nav-disc" aria-selected="true">Discrimination</button>
-      <button class="nav-link" id="nav-cal-tab" data-bs-toggle="tab" data-bs-target="#nav-cal" type="button" role="tab" aria-controls="nav-cal" aria-selected="false">Calibration</button>
+      <button class="nav-link active" id="nav-disc-tab" type="button" role="tab">Discrimination</button>
+      <button class="nav-link" id="nav-cal-tab" type="button" role="tab">Calibration</button>
     </div>
   </nav>
 
@@ -26,7 +26,7 @@
     <div class="tab-content" id="nav-tabContent">
       
       <!-- TAB 1: Discrimination -->
-      <div class="tab-pane fade show active" id="nav-disc" role="tabpanel" aria-labelledby="nav-disc-tab">
+      <div class="tab-pane fade show active" id="nav-disc" role="tabpanel">
         <div class="row">
           <div class="col-md-4 sidebar">
             <h5>Area Under the ROC Curve (AUC)</h5>
@@ -51,7 +51,7 @@
       </div>
 
       <!-- TAB 2: Calibration -->
-      <div class="tab-pane fade" id="nav-cal" role="tabpanel" aria-labelledby="nav-cal-tab">
+      <div class="tab-pane fade" id="nav-cal" role="tabpanel" style="display: none;">
         <div class="row">
           <div class="col-md-4 sidebar">
             <div class="mb-3">
@@ -84,9 +84,36 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/bootstrap.bundle.min.js"></script>
   <script>
-    // 1. AUC Update Logic
+    // Tab switching handlers
+    const discTab = document.getElementById('nav-disc-tab');
+    const calTab = document.getElementById('nav-cal-tab');
+    const discPane = document.getElementById('nav-disc');
+    const calPane = document.getElementById('nav-cal');
+
+    discTab.addEventListener('click', function() {
+      discTab.classList.add('active');
+      calTab.classList.remove('active');
+      
+      discPane.style.display = 'block';
+      discPane.classList.add('show', 'active');
+      
+      calPane.style.display = 'none';
+      calPane.classList.remove('show', 'active');
+    });
+
+    calTab.addEventListener('click', function() {
+      calTab.classList.add('active');
+      discTab.classList.remove('active');
+      
+      calPane.style.display = 'block';
+      calPane.classList.add('show', 'active');
+      
+      discPane.style.display = 'none';
+      discPane.classList.remove('show', 'active');
+    });
+
+    // AUC Update Logic
     const aucSlider = document.getElementById('aucSlider');
     const aucValue = document.getElementById('aucValue');
     const aucImg = document.getElementById('aucImg');
@@ -97,7 +124,7 @@
       aucImg.src = `www/auc_${val}.png`;
     });
 
-    // 2. Calibration Update Logic
+    // Calibration Update Logic
     const slopeSlider = document.getElementById('slopeSlider');
     const interSlider = document.getElementById('interSlider');
     const slopeValue = document.getElementById('slopeValue');
@@ -108,7 +135,6 @@
       let slope = parseFloat(slopeSlider.value);
       let inter = parseFloat(interSlider.value);
 
-      // Prevent -0.0 string formatting bugs
       if (Math.abs(slope) === 0) slope = 0;
       if (Math.abs(inter) === 0) inter = 0;
 
