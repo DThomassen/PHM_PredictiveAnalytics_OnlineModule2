@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Model Performance Visualization</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -10,144 +11,141 @@
     .sidebar { background: #ffffff; padding: 20px; border-radius: 8px; border: 1px solid #e3e6f0; }
     .plot-container img { width: 100%; max-width: 800px; height: auto; display: block; margin: auto; }
     .card { margin-top: 15px; }
+    
+    /* Force tab pane visibility via simple style rules */
+    .tab-content-pane { display: none; }
+    .tab-content-pane.active-pane { display: block !important; }
   </style>
 </head>
 <body>
 
   <!-- Top Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
-    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-      <button class="nav-link active" id="nav-disc-tab" type="button" role="tab">Discrimination</button>
-      <button class="nav-link" id="nav-cal-tab" type="button" role="tab">Calibration</button>
+    <div class="nav nav-tabs" role="tablist">
+      <button class="nav-link active" id="btn-disc" type="button">Discrimination</button>
+      <button class="nav-link" id="btn-cal" type="button">Calibration</button>
     </div>
   </nav>
 
   <div class="container-fluid p-4">
-    <div class="tab-content" id="nav-tabContent">
-      
-      <!-- TAB 1: Discrimination -->
-      <div class="tab-pane fade show active" id="nav-disc" role="tabpanel">
-        <div class="row">
-          <div class="col-md-4 sidebar">
-            <h5>Area Under the ROC Curve (AUC)</h5>
-            <div class="mb-3">
-              <label for="aucSlider" class="form-label">AUC: <strong id="aucValue">0.750</strong></label>
-              <input type="range" class="form-range" id="aucSlider" min="0.5" max="0.99" step="0.005" value="0.75">
-            </div>
-            
-            <div class="card">
-              <div class="card-header font-weight-bold">Description</div>
-              <div class="card-body">
-                <p>Discrimination refers to a model's ability to separate people who experience the outcome (cases) from people who do not experience the outcome of interest (non-cases). Greater separation implies better discrimination.</p>
-                <p>The AUC is one measure of discrimination. It asks the following question: suppose we randomly pick one individual who experienced the outcome from the data and one individual who did not. What is the probability that our model correctly identifies the "case", i.e. the person with a higher risk of the outcome? Hence, an AUC of 1 means that the model can always correctly identify the "case". However, obtaining an AUC of 1 is unfeasible in practice. If the model cannot distinguish between the groups (i.e. is not better than guessing randomly) the AUC is 0.5.</p>
-                <p>The figure shows how the predicted risks are distributed among cases and non-cases. Change the value of the AUC to see what this means for the separation of the groups in the figure.</p>
-              </div>
-            </div>
+    
+    <!-- TAB 1: Discrimination -->
+    <div class="tab-content-pane active-pane" id="pane-disc">
+      <div class="row">
+        <div class="col-md-4 sidebar">
+          <h5>Area Under the ROC Curve (AUC)</h5>
+          <div class="mb-3">
+            <label for="aucSlider" class="form-label">AUC: <strong id="aucValue">0.750</strong></label>
+            <input type="range" class="form-range" id="aucSlider" min="0.5" max="0.99" step="0.005" value="0.75">
           </div>
-          <div class="col-md-8 plot-container">
-            <img id="aucImg" src="www/auc_0.750.png" alt="AUC Plot">
+          
+          <div class="card">
+            <div class="card-header font-weight-bold">Description</div>
+            <div class="card-body">
+              <p>Discrimination refers to a model's ability to separate people who experience the outcome (cases) from people who do not experience the outcome of interest (non-cases). Greater separation implies better discrimination.</p>
+              <p>The AUC is one measure of discrimination. It asks the following question: suppose we randomly pick one individual who experienced the outcome from the data and one individual who did not. What is the probability that our model correctly identifies the "case", i.e. the person with a higher risk of the outcome? Hence, an AUC of 1 means that the model can always correctly identify the "case". However, obtaining an AUC of 1 is unfeasible in practice. If the model cannot distinguish between the groups (i.e. is not better than guessing randomly) the AUC is 0.5.</p>
+              <p>The figure shows how the predicted risks are distributed among cases and non-cases. Change the value of the AUC to see what this means for the separation of the groups in the figure.</p>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- TAB 2: Calibration -->
-      <div class="tab-pane fade" id="nav-cal" role="tabpanel" style="display: none;">
-        <div class="row">
-          <div class="col-md-4 sidebar">
-            <div class="mb-3">
-              <label for="slopeSlider" class="form-label">Calibration slope: <strong id="slopeValue">1.0</strong></label>
-              <input type="range" class="form-range" id="slopeSlider" min="0" max="4" step="0.2" value="1">
-            </div>
-            <div class="mb-3">
-              <label for="interSlider" class="form-label">Calibration intercept: <strong id="interValue">0.0</strong></label>
-              <input type="range" class="form-range" id="interSlider" min="-1" max="1" step="0.1" value="0">
-            </div>
-
-            <div class="card">
-              <div class="card-header font-weight-bold">Description</div>
-              <div class="card-body">
-                <p>Calibration refers to how well the predicted risks are aligned with the observed risks on average. For example, we would like that the observed risk is on average 0.5 among individuals with predicted risk 0.5. If this is (approximately) the case, we say that the model is well calibrated. When this is not the case, the model is said to be miscalibrated.</p>
-                <p>A calibration plot is one tool to assess calibration. In a calibration plot, predicted risks are compared to the observed percentage of people who experience the outcome (observed risk). The calibration curve can be described with an intercept and a slope. The intercept will be close to 0 and the slope will be close to 1 for a well calibrated model. The calibration curve is then a diagonal line. In presence of miscalibration, the risks are under- and/or overestimated. The curve will deviate from the diagonal line.</p>
-                <p>In the figure, change the calibration slope and intercept to see what this means for the calibration of the model. The calibration intercept and slope can be difficult to interpret simultaneously, so it is preferred to study them separately, keeping the intercept at 1 when varying the slope and keeping the slope at 0 when varying the intercept.</p>
-                <p>The calibration intercept can be seen as a measure of overall prediction bias. Keeping the slope equal to one, but changing the intercept, you will see that the risks are either under- or overestimated</p>
-                <p>The calibration slope can be thought of as a measure of how well the model captures the variability of the individual risks. Keeping the intercept at zero, but setting the slope to be larger than one you will see that the predictions are not "extreme" enough. The model tends to overestimate the risk for individuals with low risk, but underestimate the risk for individuals with high risk. If the slope is smaller than one, the predictions are too extreme. Low risks are underestimated while high risks are overestimated.</p>
-                <p>Note: the reason that the calibration curve is not necessarily a straight line is because it is computed on the log-odds (logit) scale: logit(Observed risk) ≈ Intercept + slope*logit(Predicted risk), where logit(p)=ln(p/1-p).</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-8 plot-container">
-            <img id="calImg" src="www/cal_s1.0_i0.0.png" alt="Calibration Plot">
-          </div>
+        <div class="col-md-8 plot-container">
+          <img id="aucImg" src="www/auc_0.750.png" alt="AUC Plot">
         </div>
       </div>
-
     </div>
+
+    <!-- TAB 2: Calibration -->
+    <div class="tab-content-pane" id="pane-cal">
+      <div class="row">
+        <div class="col-md-4 sidebar">
+          <div class="mb-3">
+            <label for="slopeSlider" class="form-label">Calibration slope: <strong id="slopeValue">1.0</strong></label>
+            <input type="range" class="form-range" id="slopeSlider" min="0" max="4" step="0.2" value="1">
+          </div>
+          <div class="mb-3">
+            <label for="interSlider" class="form-label">Calibration intercept: <strong id="interValue">0.0</strong></label>
+            <input type="range" class="form-range" id="interSlider" min="-1" max="1" step="0.1" value="0">
+          </div>
+
+          <div class="card">
+            <div class="card-header font-weight-bold">Description</div>
+            <div class="card-body">
+              <p>Calibration refers to how well the predicted risks are aligned with the observed risks on average. For example, we would like that the observed risk is on average 0.5 among individuals with predicted risk 0.5. If this is (approximately) the case, we say that the model is well calibrated. When this is not the case, the model is said to be miscalibrated.</p>
+              <p>A calibration plot is one tool to assess calibration. In a calibration plot, predicted risks are compared to the observed percentage of people who experience the outcome (observed risk). The calibration curve can be described with an intercept and a slope. The intercept will be close to 0 and the slope will be close to 1 for a well calibrated model. The calibration curve is then a diagonal line. In presence of miscalibration, the risks are under- and/or overestimated. The curve will deviate from the diagonal line.</p>
+              <p>In the figure, change the calibration slope and intercept to see what this means for the calibration of the model. The calibration intercept and slope can be difficult to interpret simultaneously, so it is preferred to study them separately, keeping the intercept at 1 when varying the slope and keeping the slope at 0 when varying the intercept.</p>
+              <p>The calibration intercept can be seen as a measure of overall prediction bias. Keeping the slope equal to one, but changing the intercept, you will see that the risks are either under- or overestimated</p>
+              <p>The calibration slope can be thought of as a measure of how well the model captures the variability of the individual risks. Keeping the intercept at zero, but setting the slope to be larger than one you will see that the predictions are not "extreme" enough. The model tends to overestimate the risk for individuals with low risk, but underestimate the risk for individuals with high risk. If the slope is smaller than one, the predictions are too extreme. Low risks are underestimated while high risks are overestimated.</p>
+              <p>Note: the reason that the calibration curve is not necessarily a straight line is because it is computed on the log-odds (logit) scale: logit(Observed risk) ≈ Intercept + slope*logit(Predicted risk), where logit(p)=ln(p/1-p).</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-8 plot-container">
+          <img id="calImg" src="www/cal_s1.0_i0.0.png" alt="Calibration Plot">
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    // Tab switching handlers
-    const discTab = document.getElementById('nav-disc-tab');
-    const calTab = document.getElementById('nav-cal-tab');
-    const discPane = document.getElementById('nav-disc');
-    const calPane = document.getElementById('nav-cal');
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elements
+      const btnDisc = document.getElementById('btn-disc');
+      const btnCal = document.getElementById('btn-cal');
+      const paneDisc = document.getElementById('pane-disc');
+      const paneCal = document.getElementById('pane-cal');
 
-    discTab.addEventListener('click', function() {
-      discTab.classList.add('active');
-      calTab.classList.remove('active');
-      
-      discPane.style.display = 'block';
-      discPane.classList.add('show', 'active');
-      
-      calPane.style.display = 'none';
-      calPane.classList.remove('show', 'active');
+      const aucSlider = document.getElementById('aucSlider');
+      const aucValue = document.getElementById('aucValue');
+      const aucImg = document.getElementById('aucImg');
+
+      const slopeSlider = document.getElementById('slopeSlider');
+      const interSlider = document.getElementById('interSlider');
+      const slopeValue = document.getElementById('slopeValue');
+      const interValue = document.getElementById('interValue');
+      const calImg = document.getElementById('calImg');
+
+      // 1. Tab Switching Functionality
+      btnDisc.addEventListener('click', function() {
+        btnDisc.classList.add('active');
+        btnCal.classList.remove('active');
+        paneDisc.classList.add('active-pane');
+        paneCal.classList.remove('active-pane');
+      });
+
+      btnCal.addEventListener('click', function() {
+        btnCal.classList.add('active');
+        btnDisc.classList.remove('active');
+        paneCal.classList.add('active-pane');
+        paneDisc.classList.remove('active-pane');
+      });
+
+      // 2. AUC Slider Logic
+      aucSlider.addEventListener('input', function() {
+        const val = parseFloat(this.value).toFixed(3);
+        aucValue.textContent = val;
+        aucImg.src = `www/auc_${val}.png`;
+      });
+
+      // 3. Calibration Sliders Logic
+      function updateCalibration() {
+        let slope = parseFloat(slopeSlider.value);
+        let inter = parseFloat(interSlider.value);
+
+        if (Math.abs(slope) === 0) slope = 0;
+        if (Math.abs(inter) === 0) inter = 0;
+
+        const slopeStr = slope.toFixed(1);
+        const interStr = inter.toFixed(1);
+
+        slopeValue.textContent = slopeStr;
+        interValue.textContent = interStr;
+        calImg.src = `www/cal_s${slopeStr}_i${interStr}.png`;
+      }
+
+      slopeSlider.addEventListener('input', updateCalibration);
+      interSlider.addEventListener('input', updateCalibration);
     });
-
-    calTab.addEventListener('click', function() {
-      calTab.classList.add('active');
-      discTab.classList.remove('active');
-      
-      calPane.style.display = 'block';
-      calPane.classList.add('show', 'active');
-      
-      discPane.style.display = 'none';
-      discPane.classList.remove('show', 'active');
-    });
-
-    // AUC Update Logic
-    const aucSlider = document.getElementById('aucSlider');
-    const aucValue = document.getElementById('aucValue');
-    const aucImg = document.getElementById('aucImg');
-
-    aucSlider.addEventListener('input', function() {
-      const val = parseFloat(this.value).toFixed(3);
-      aucValue.textContent = val;
-      aucImg.src = `www/auc_${val}.png`;
-    });
-
-    // Calibration Update Logic
-    const slopeSlider = document.getElementById('slopeSlider');
-    const interSlider = document.getElementById('interSlider');
-    const slopeValue = document.getElementById('slopeValue');
-    const interValue = document.getElementById('interValue');
-    const calImg = document.getElementById('calImg');
-
-    function updateCalibration() {
-      let slope = parseFloat(slopeSlider.value);
-      let inter = parseFloat(interSlider.value);
-
-      if (Math.abs(slope) === 0) slope = 0;
-      if (Math.abs(inter) === 0) inter = 0;
-
-      const slopeStr = slope.toFixed(1);
-      const interStr = inter.toFixed(1);
-
-      slopeValue.textContent = slopeStr;
-      interValue.textContent = interStr;
-      calImg.src = `www/cal_s${slopeStr}_i${interStr}.png`;
-    }
-
-    slopeSlider.addEventListener('input', updateCalibration);
-    interSlider.addEventListener('input', updateCalibration);
   </script>
 </body>
 </html>
